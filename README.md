@@ -2,7 +2,7 @@
 
 A modern, responsive web-based soundboard application with timer functionality, built using vanilla JavaScript and modern web technologies.
 
-![Version](https://img.shields.io/badge/version-0.0.2-blue.svg)
+![Version](https://img.shields.io/badge/version-0.0.3-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
 ## Features
@@ -17,29 +17,49 @@ A modern, responsive web-based soundboard application with timer functionality, 
 - 🔔 Toast notifications
 - ♿ Accessibility features
 - 📱 PWA support
+- 🌐 GitHub Pages integration
+- 💾 Offline functionality
+- 🎨 Modern UI/UX design
+- 🔄 Virtual environment support
 
 ## Getting Started
 
 ### Prerequisites
 
+- Python 3.9 or higher
 - Modern web browser (Chrome, Firefox, Safari, Edge)
-- Local web server (optional)
+- pip (Python package installer)
+- Virtual environment (recommended)
 
 ### Installation
 
 1. Clone the repository:
-
    ```shell
    git clone https://github.com/yourusername/Soundboard-Python.git
    ```
 
 2. Navigate to the project directory:
-
    ```shell
    cd Soundboard-Python
    ```
 
-3. Open `index.html` in your web browser or serve it through a local web server.
+3. Create and activate a virtual environment:
+   ```shell
+   python3 -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+4. Install required packages:
+   ```shell
+   pip install -r requirements.txt
+   ```
+
+5. Generate placeholder sounds (optional):
+   ```shell
+   python src/python/create_sounds.py
+   ```
+
+6. Open `docs/index.html` in your web browser or serve it through a local web server.
 
 ## Usage
 
@@ -58,30 +78,65 @@ A modern, responsive web-based soundboard application with timer functionality, 
 - `1-3`: Play Sounds 1-3
 - `M`: Mute/Unmute
 
+### Supported Audio Formats
+
+- WAV (recommended for best compatibility)
+- MP3
+- OGG
+- FLAC
+- AIFF
+
+Maximum file size: 10MB
+
 ## Development
 
 ### Project Structure
 
 ```plaintext
 Soundboard-Python/
-├── index.html          # Main application file
-├── README.md          # Project documentation
-├── CHANGELOG.md       # Version history
-├── LICENSE           # License information
-└── sounds/           # Default sound files
-    ├── sound1.wav
-    ├── sound2.wav
-    └── sound3.wav
+├── docs/                  # GitHub Pages files
+│   ├── css/              # Stylesheets
+│   ├── js/               # JavaScript files
+│   ├── sounds/           # Sound files
+│   ├── index.html        # Main application
+│   ├── _config.yml       # GitHub Pages config
+│   └── sw.js             # Service Worker
+├── src/                  # Source code
+│   └── python/           # Python scripts
+│       ├── soundboard.py # Main Python app
+│       └── create_sounds.py # Sound generator
+├── sounds/               # Original sound files
+├── venv/                 # Virtual environment
+├── requirements.txt      # Python dependencies
+├── README.md            # Documentation
+├── CHANGELOG.md         # Version history
+└── LICENSE             # License information
 ```
 
 ### Technologies Used
 
-- HTML5
+- HTML5 with semantic markup
 - CSS3 with Custom Properties
-- Vanilla JavaScript
+- Vanilla JavaScript (ES6+)
 - Web Audio API
-- Service Workers
+- Service Workers for PWA
+- Python 3.9+
 - Font Awesome Icons
+- GitHub Pages
+
+### Development Setup
+
+1. Install Python dependencies:
+   ```shell
+   pip install -r requirements.txt
+   ```
+
+2. Start local development:
+   ```shell
+   python -m http.server
+   ```
+
+3. Visit `http://localhost:8000/docs/` in your browser
 
 ## Contributing
 
@@ -100,3 +155,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Font Awesome for icons
 - [Keep a Changelog](https://keepachangelog.com)
 - [Semantic Versioning](https://semver.org)
+- Web Audio API community
+- GitHub Pages

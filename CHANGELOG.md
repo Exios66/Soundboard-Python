@@ -29,9 +29,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Python package compatibility issues
-- Sound playback reliability
+- Sound playback reliability and multiple playback issues
 - Theme persistence across sessions
 - Mobile responsiveness on various devices
+- Timer state management
 
 ## [0.0.2] - 2024-01-20
 
@@ -53,20 +54,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reduced motion support
 - SEO meta tags and favicon
 
-### Changed
+### Improvements
 
 - Enhanced timer controls with play/pause and reset buttons
 - Improved UI/UX with modern design
 - Better error handling and user feedback
 - Optimized mobile layout
 - Improved sound management system
-
-### Fixed
-
-- Multiple sound playback issues
-- Timer state management
-- Mobile responsiveness issues
-- Theme persistence across sessions
 
 ## [0.0.1] - 2024-01-19
 
