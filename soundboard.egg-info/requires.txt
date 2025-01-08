@@ -1,0 +1,4 @@
+customtkinter==5.2.2
+sounddevice==0.5.1
+soundfile==0.13.0
+playsound==1.2.2

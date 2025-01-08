@@ -1,0 +1,8 @@
+LICENSE
+README.md
+setup.py
+soundboard.egg-info/PKG-INFO
+soundboard.egg-info/SOURCES.txt
+soundboard.egg-info/dependency_links.txt
+soundboard.egg-info/requires.txt
+soundboard.egg-info/top_level.txt
