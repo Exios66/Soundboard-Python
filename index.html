@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Soundboard with Timer</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f0f2f5;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+            --accent-color: #3498db;
+            --accent-hover: #2980b9;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --border: #e0e0e0;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2c2c2c;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --accent-color: #4fa3e3;
+            --accent-hover: #2980b9;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --border: #404040;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: var(--bg-secondary);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(360deg);
+        }
+
+        .timer {
+            font-size: 2rem;
+            font-weight: 600;
+            background-color: var(--bg-primary);
+            padding: 1rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            box-shadow: 0 2px 4px var(--shadow);
+            color: var(--text-primary);
+        }
+
+        .button-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .button {
+            background-color: var(--accent-color);
+            border: none;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .button:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        .button i {
+            font-size: 1.2rem;
+        }
+
+        .custom-file-upload {
+            border: 2px dashed var(--border);
+            padding: 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 1rem;
+            text-align: center;
+            background-color: var(--bg-primary);
+        }
+
+        .custom-file-upload:hover {
+            border-color: var(--accent-color);
+        }
+
+        .custom-sounds {
+            margin-top: 2rem;
+        }
+
+        .sound-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .timer {
+                font-size: 1.5rem;
+            }
+            
+            .button-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Soundboard</h1>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+
+        <div class="timer" id="timer">10:00</div>
+
+        <div class="button-container">
+            <button class="button" onclick="playSound('sound1.wav')">
+                <i class="fas fa-play"></i>
+                Sound 1
+            </button>
+            <button class="button" onclick="playSound('sound2.wav')">
+                <i class="fas fa-play"></i>
+                Sound 2
+            </button>
+            <button class="button" onclick="playSound('sound3.wav')">
+                <i class="fas fa-play"></i>
+                Sound 3
+            </button>
+        </div>
+
+        <label class="custom-file-upload">
+            <input type="file" id="customFile" accept="audio/*" style="display: none;" onchange="addCustomSound()">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <div>Drop audio file here or click to upload</div>
+        </label>
+
+        <div class="custom-sounds">
+            <div class="sound-list" id="customSoundsList"></div>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+        
+        function setTheme(isDark) {
+            document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+            themeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        // Initialize theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            setTheme(savedTheme === 'dark');
+        } else {
+            setTheme(prefersDark.matches);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            setTheme(!isDark);
+        });
+
+        // Timer functionality
+        let timerSeconds = 10 * 60;
+        let timerInterval;
+        let isTimerRunning = true;
+
+        function updateTimer() {
+            if (timerSeconds > 0 && isTimerRunning) {
+                let minutes = Math.floor(timerSeconds / 60);
+                let seconds = timerSeconds % 60;
+                document.getElementById("timer").textContent = 
+                    `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                timerSeconds--;
+            } else if (timerSeconds === 0) {
+                clearInterval(timerInterval);
+                document.getElementById("timer").textContent = "00:00";
+                playSound('original.wav');
+            }
+        }
+
+        document.getElementById("timer").addEventListener('click', () => {
+            isTimerRunning = !isTimerRunning;
+            document.getElementById("timer").style.opacity = isTimerRunning ? "1" : "0.6";
+        });
+
+        timerInterval = setInterval(updateTimer, 1000);
+
+        // Sound functionality
+        let customSounds = [];
+
+        function playSound(file) {
+            const audio = new Audio(file);
+            audio.play().catch(error => {
+                console.error('Error playing sound:', error);
+            });
+        }
+
+        function addCustomSound() {
+            const fileInput = document.getElementById('customFile');
+            const file = fileInput.files[0];
+            
+            if (file) {
+                const fileName = file.name;
+                const fileURL = URL.createObjectURL(file);
+                
+                customSounds.push({
+                    name: fileName,
+                    url: fileURL
+                });
+                
+                updateCustomSoundsList();
+            }
+        }
+
+        function updateCustomSoundsList() {
+            const soundsList = document.getElementById('customSoundsList');
+            soundsList.innerHTML = '';
+            
+            customSounds.forEach((sound, index) => {
+                const button = document.createElement('button');
+                button.className = 'button';
+                button.innerHTML = `
+                    <i class="fas fa-play"></i>
+                    ${sound.name.substring(0, 20)}${sound.name.length > 20 ? '...' : ''}
+                `;
+                button.onclick = () => playSound(sound.url);
+                soundsList.appendChild(button);
+            });
+        }
+
+        // Drag and drop functionality
+        const dropZone = document.querySelector('.custom-file-upload');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight(e) {
+            dropZone.style.borderColor = var(--accent-color);
+            dropZone.style.backgroundColor = var(--bg-secondary);
+        }
+
+        function unhighlight(e) {
+            dropZone.style.borderColor = var(--border);
+            dropZone.style.backgroundColor = var(--bg-primary);
+        }
+
+        dropZone.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const file = dt.files[0];
+            
+            if (file && file.type.startsWith('audio/')) {
+                document.getElementById('customFile').files = dt.files;
+                addCustomSound();
+            }
+        }
+    </script>
+</body>
+</html>
