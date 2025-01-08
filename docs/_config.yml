@@ -1,0 +1,6 @@
+theme: jekyll-theme-minimal
+title: Modern Soundboard with Timer
+description: A modern soundboard application with timer functionality
+show_downloads: true
+google_analytics: # Optional - Add your tracking ID
+baseurl: "/Soundboard-Python" 

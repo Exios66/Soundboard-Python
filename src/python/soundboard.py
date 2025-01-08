@@ -1,3 +1,20 @@
+"""
+Modern Soundboard with Timer Application
+
+Supported Audio Formats:
+- WAV (*.wav): Recommended format, best compatibility
+- MP3 (*.mp3): Common format, requires additional codec support
+- FLAC (*.flac): Lossless format, larger file size
+- OGG (*.ogg): Free format, good compression
+- AIFF (*.aiff, *.aif): Apple's audio format
+
+File Requirements:
+- Maximum file size: 10MB
+- Sample rates: 44.1kHz, 48kHz (recommended)
+- Bit depth: 16-bit, 24-bit
+- Channels: Mono or Stereo
+"""
+
 import os
 import time
 import threading
@@ -7,6 +24,17 @@ import sounddevice as sd
 import soundfile as sf
 from playsound import playsound
 
+# Define supported formats
+SUPPORTED_FORMATS = {
+    "Audio Files": [
+        ".wav",   # Waveform Audio File Format
+        ".mp3",   # MPEG Layer-3 Audio
+        ".flac",  # Free Lossless Audio Codec
+        ".ogg",   # Ogg Vorbis Audio
+        ".aiff",  # Audio Interchange File Format
+        ".aif"    # AIFF alternative extension
+    ]
+}
 
 class SoundboardApp:
     def __init__(self, root, original_audio, delay_minutes):
@@ -19,6 +47,11 @@ class SoundboardApp:
         self.delay_seconds = delay_minutes * 60
         self.time_remaining = self.delay_seconds
         self.countdown_running = True
+
+        # Default sounds directory
+        self.sounds_dir = os.path.join(os.path.dirname(__file__), "..", "..", "sounds")
+        if not os.path.exists(self.sounds_dir):
+            os.makedirs(self.sounds_dir)
 
         # Header
         self.header = ctk.CTkLabel(root, text="Soundboard & Timer", font=("Helvetica", 28, "bold"))
@@ -34,9 +67,9 @@ class SoundboardApp:
 
         # Add default sound buttons
         self.default_sounds = {
-            "Sound 1": "path_to_sound1.wav",
-            "Sound 2": "path_to_sound2.wav",
-            "Sound 3": "path_to_sound3.wav"
+            "Sound 1": os.path.join(self.sounds_dir, "sound1.wav"),
+            "Sound 2": os.path.join(self.sounds_dir, "sound2.wav"),
+            "Sound 3": os.path.join(self.sounds_dir, "sound3.wav")
         }
         for name, path in self.default_sounds.items():
             btn = ctk.CTkButton(self.buttons_frame, text=name, command=lambda p=path: self.play_sound(p), width=150)
@@ -55,23 +88,50 @@ class SoundboardApp:
         self.update_timer()
 
     def play_sound(self, file_path):
-        """Play a sound file."""
+        """
+        Play a sound file.
+        
+        Supports multiple formats through soundfile and playsound libraries.
+        Falls back to playsound if soundfile fails.
+        """
         try:
             if not os.path.exists(file_path):
                 messagebox.showerror("Error", f"File not found: {file_path}")
                 return
 
-            data, samplerate = sf.read(file_path)
-            sd.play(data, samplerate)
-            sd.wait()
+            # Check file size
+            if os.path.getsize(file_path) > 10 * 1024 * 1024:  # 10MB limit
+                messagebox.showerror("Error", "File size exceeds 10MB limit")
+                return
+
+            try:
+                # Try soundfile/sounddevice first for better control
+                data, samplerate = sf.read(file_path)
+                sd.play(data, samplerate)
+                sd.wait()
+            except Exception as e:
+                # Fall back to playsound for other formats
+                playsound(file_path)
+                
         except Exception as e:
             messagebox.showerror("Error", f"Failed to play sound: {e}")
 
     def add_custom_sound(self):
         """Add a custom sound using file dialog."""
+        filetypes = [
+            ("All Supported Audio", " ".join(f"*{ext}" for ext in SUPPORTED_FORMATS["Audio Files"])),
+            ("WAV Files", "*.wav"),
+            ("MP3 Files", "*.mp3"),
+            ("FLAC Files", "*.flac"),
+            ("OGG Files", "*.ogg"),
+            ("AIFF Files", "*.aiff;*.aif"),
+            ("All Files", "*.*")
+        ]
+        
         file_path = filedialog.askopenfilename(
             title="Select a Sound File",
-            filetypes=(("Audio Files", "*.wav *.mp3 *.flac"), ("All Files", "*.*"))
+            filetypes=filetypes,
+            initialdir=self.sounds_dir
         )
         if file_path:
             name = os.path.basename(file_path)
@@ -97,13 +157,9 @@ class SoundboardApp:
 
 def main():
     # Original sound settings
-    original_audio = "path_to_original_sound.wav"  # Replace with your original sound file
+    sounds_dir = os.path.join(os.path.dirname(__file__), "..", "..", "sounds")
+    original_audio = os.path.join(sounds_dir, "timer-end.wav")
     delay_minutes = 10  # Delay before the original sound plays
-
-    # Check if the original sound file exists
-    if not os.path.exists(original_audio):
-        print(f"Error: The file '{original_audio}' does not exist.")
-        return
 
     # Initialize GUI
     ctk.set_appearance_mode("dark")  # Options: "light", "dark", or "system"

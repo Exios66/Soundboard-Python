@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.3] - 2024-01-21
+
+### Added
+
+- GitHub Pages support with custom domain configuration
+- Separate CSS and JavaScript files for better organization
+- Python virtual environment setup
+- Requirements.txt with specific package versions
+- Proper project structure with /docs directory
+- Service Worker for offline functionality
+- Progressive Web App (PWA) capabilities
+- Sound generation script for placeholder audio files
+- Comprehensive documentation in README
+
+### Changed
+
+- Improved project structure with better organization
+- Enhanced documentation with detailed setup instructions
+- Optimized sound file handling
+- Updated dependencies to stable versions
+
+### Fixed
+
+- Python package compatibility issues
+- Sound playback reliability
+- Theme persistence across sessions
+- Mobile responsiveness on various devices
+
 ## [0.0.2] - 2024-01-20
 
 ### Added

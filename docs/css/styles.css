@@ -1,0 +1,338 @@
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f0f2f5;
+    --text-primary: #1a1a1a;
+    --text-secondary: #666666;
+    --accent-color: #3498db;
+    --accent-hover: #2980b9;
+    --shadow: rgba(0, 0, 0, 0.1);
+    --border: #e0e0e0;
+    --error: #e74c3c;
+    --success: #2ecc71;
+}
+
+[data-theme="dark"] {
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2c2c2c;
+    --text-primary: #ffffff;
+    --text-secondary: #b3b3b3;
+    --accent-color: #4fa3e3;
+    --accent-hover: #2980b9;
+    --shadow: rgba(0, 0, 0, 0.3);
+    --border: #404040;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: var(--bg-secondary);
+    border-radius: 16px;
+    box-shadow: 0 4px 6px var(--shadow);
+}
+
+/* Rest of the CSS from index.html */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.theme-toggle {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+
+.theme-toggle:hover {
+    transform: rotate(360deg);
+}
+
+.volume-control {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.volume-slider {
+    width: 100px;
+    height: 4px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--text-secondary);
+    border-radius: 2px;
+    outline: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background: var(--accent-color);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.volume-slider::-webkit-slider-thumb:hover {
+    background: var(--accent-hover);
+}
+
+.timer {
+    font-size: 2rem;
+    font-weight: 600;
+    background-color: var(--bg-primary);
+    padding: 1rem;
+    border-radius: 12px;
+    margin: 1.5rem 0;
+    box-shadow: 0 2px 4px var(--shadow);
+    color: var(--text-primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.timer-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.timer-btn {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: transform 0.2s;
+}
+
+.timer-btn:hover {
+    transform: scale(1.1);
+}
+
+.button-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.button {
+    background-color: var(--accent-color);
+    border: none;
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, background-color 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+
+.button:hover {
+    background-color: var(--accent-hover);
+    transform: translateY(-2px);
+}
+
+.button i {
+    font-size: 1.2rem;
+}
+
+.button.playing {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.visualizer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.visualizer-bar {
+    height: 100%;
+    background: white;
+    width: 0;
+    transition: width 0.1s;
+}
+
+.custom-file-upload {
+    border: 2px dashed var(--border);
+    padding: 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 1rem;
+    text-align: center;
+    background-color: var(--bg-primary);
+    transition: all 0.3s;
+}
+
+.custom-file-upload:hover, .custom-file-upload.drag-over {
+    border-color: var(--accent-color);
+    background-color: var(--bg-secondary);
+}
+
+.custom-file-upload i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: var(--accent-color);
+}
+
+.sound-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    opacity: 0;
+    transform: translateY(100%);
+    transition: all 0.3s;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast.error {
+    background-color: var(--error);
+}
+
+.toast.success {
+    background-color: var(--success);
+}
+
+.loading {
+    position: relative;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(2px);
+    border-radius: 8px;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    .timer {
+        font-size: 1.5rem;
+    }
+    
+    .button-container {
+        grid-template-columns: 1fr;
+    }
+
+    .volume-control {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+.keyboard-shortcuts {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.shortcuts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.shortcut {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.key {
+    background: var(--bg-primary);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-family: monospace;
+    border: 1px solid var(--border);
+} 
